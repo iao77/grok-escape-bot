@@ -23,4 +23,4 @@ async def on_ready():
 async def start(interaction: discord.Interaction):
     await interaction.response.send_message("🔐 Tu as lancé la partie. Prépare-toi à t’échapper !")
 
-client.run(TOKEN)
+if __name__ == "__main__":client.run(TOKEN)
