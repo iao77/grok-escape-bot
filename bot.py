@@ -1,30 +1,24 @@
 import os
+
+TOKEN = os.getenv("JETON_BOT_DISCORD")
+print("Token récupéré :", "****" + TOKEN[-4:] if TOKEN else "AUCUN TOKEN TROUVÉ")
+
+if not TOKEN:
+    raise RuntimeError("""
+    ERREUR : Variable 'JETON_BOT_DISCORD' manquante.
+    Vérifiez que :
+    1. Le nom est EXACTEMENT 'JETON_BOT_DISCORD' (copiez-collez ce nom)
+    2. La variable est bien sauvegardée (onglet Variables → bouton Save)
+    """)
+
 import discord
 from discord.ext import commands
 
-# Vérification stricte du token
-TOKEN = os.getenv("JETON_BOT_DISCORD")
-if not TOKEN:
-    raise ValueError("""
-    ERREUR CRITIQUE :
-    Le token Discord est introuvable.
-    Vérifiez que :
-    1. La variable 'JETON_BOT_DISCORD' existe bien dans Railway
-    2. Le nom est exactement le même (sans espaces)
-    3. Le token est valide (non expiré)
-    """)
-
-# Configuration du bot
-intents = discord.Intents.default()
-intents.message_content = True
-bot = commands.Bot(command_prefix="!", intents=intents)
+bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 
 @bot.event
 async def on_ready():
-    print(f"✅ {bot.user.name} connecté avec succès !")
-
-@bot.command()
-async def ping(ctx):
-    await ctx.send("Pong !")
+    print(f"✅ Connecté en tant que {bot.user}")
+    await bot.change_presence(activity=discord.Game(name="/start"))
 
 bot.run(TOKEN)
