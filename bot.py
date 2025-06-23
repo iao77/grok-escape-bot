@@ -12,12 +12,16 @@ tree = bot.tree
 @bot.event
 async def on_ready():
     print(f"✅ {bot.user} est connecté")
-    guild = discord.Object(id=1383331599201992704)  # Synchronisation par guilde (ton serveur)
-    try:
-        synced = await tree.sync(guild=guild)
-        print(f"🔗 {len(synced)} slash commands synchronisées pour la guilde")
-    except Exception as e:
-        print(f"❌ Erreur de sync : {e}")
+    guild_id = os.getenv("GUILD_ID")  # Récupère l'ID de la guilde depuis les variables d'environnement
+    if guild_id:
+        guild = discord.Object(id=int(guild_id))  # Convertit l'ID en objet Discord
+        try:
+            synced = await tree.sync(guild=guild)  # Synchronisation spécifique à la guilde
+            print(f"🔗 {len(synced)} slash commands synchronisées pour la guilde {guild_id}")
+        except Exception as e:
+            print(f"❌ Erreur de sync : {e}")
+    else:
+        print("❌ GUILD_ID non défini dans les variables d'environnement")
 
 # Commande classique (préfixe "!")
 @bot.command()
